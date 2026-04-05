@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "slope-chart",
+  "description": "Comparaison de valeurs entre deux points dans le temps",
+  "type": "object",
+  "properties": {
+    "points": {
+      "type": "array",
+      "description": "Une entrée par entité (pays, catégorie…)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "start": { "type": "number" },
+          "end": { "type": "number" }
+        },
+        "required": ["label", "start", "end"]
+      }
+    }
+  },
+  "required": ["points"]
+}

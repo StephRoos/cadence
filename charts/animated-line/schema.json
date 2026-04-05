@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "animated-line",
+  "description": "Série temporelle animée avec projections en fan chart",
+  "type": "object",
+  "properties": {
+    "history": {
+      "type": "array",
+      "description": "Données historiques — une entrée par année",
+      "items": {
+        "type": "object",
+        "properties": {
+          "year": { "type": "integer" },
+          "value": { "type": "number" }
+        },
+        "required": ["year", "value"]
+      }
+    },
+    "scenarios": {
+      "type": "object",
+      "description": "Scénarios de projection — clé = nom du scénario",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "year": { "type": "integer" },
+            "p05": { "type": "number" },
+            "p25": { "type": "number" },
+            "median": { "type": "number" },
+            "p75": { "type": "number" },
+            "p95": { "type": "number" }
+          },
+          "required": ["year", "median"]
+        }
+      }
+    }
+  },
+  "required": ["history"]
+}
