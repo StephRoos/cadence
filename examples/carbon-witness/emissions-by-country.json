@@ -1,0 +1,16 @@
+{
+  "meta": {
+    "source": "Global Carbon Project / OWID",
+    "unit": "GtCO₂/an",
+    "startYear": 2000,
+    "endYear": 2023
+  },
+  "points": [
+    { "label": "Chine",  "start": 3.4,  "end": 12.6 },
+    { "label": "USA",    "start": 5.9,  "end": 4.9  },
+    { "label": "Inde",   "start": 1.0,  "end": 3.0  },
+    { "label": "UE-27",  "start": 3.5,  "end": 2.5  },
+    { "label": "Russie", "start": 1.5,  "end": 1.8  },
+    { "label": "Japon",  "start": 1.2,  "end": 1.0  }
+  ]
+}

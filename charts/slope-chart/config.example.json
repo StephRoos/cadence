@@ -1,0 +1,25 @@
+{
+  "title": "Émissions CO₂ par pays (GtCO₂/an)",
+  "subtitle": "Source : Global Carbon Project / OWID",
+  "startLabel": "2000",
+  "endLabel": "2023",
+  "unit": "GtCO₂",
+  "canvas": {
+    "maxWidth": 800,
+    "height": 500
+  },
+  "highlight": ["Chine", "Inde"],
+  "colors": {
+    "highlight": [
+      [0, 85, 85],
+      [30, 90, 90]
+    ],
+    "muted": [0, 0, 55]
+  },
+  "sortBy": "narrative",
+  "dodge": "bidi",
+  "animation": {
+    "speed": 0.005,
+    "stagger": 30
+  }
+}
