@@ -15,6 +15,8 @@ cadence/
       schema.json     ← contrat : structure attendue pour data.json
       config.example.json  ← paramètres par défaut
       index.html      ← wrapper
+    <type>/
+      DESIGN.md       ← choix de design, axes de généralisation
   adapters/         ← connecteurs : CSV, SQL, Excel → JSON conforme au schéma
   lib/              ← utilitaires partagés
   examples/         ← projets utilisant les canevas (carbon-witness, etc.)
@@ -56,4 +58,4 @@ ML engineer solide. JS notions de base. p5.js en cours d'apprentissage. D3 incon
 
 ## Canevas — état actuel
 - `animated-line` — ✅ Série temporelle + fan chart IPCC (migré depuis carbon-witness)
-- `slope-chart` — En cours : comparaison avant/après entre catégories
+- `slope-chart` — ✅ Comparaison avant/après (émissions CO₂ par pays). Voir `DESIGN.md` pour les choix et axes de généralisation.
