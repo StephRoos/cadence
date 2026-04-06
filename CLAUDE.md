@@ -59,3 +59,5 @@ ML engineer solide. JS notions de base. p5.js en cours d'apprentissage. D3 incon
 ## Canevas — état actuel
 - `animated-line` — ✅ Série temporelle + fan chart IPCC (migré depuis carbon-witness)
 - `slope-chart` — ✅ Comparaison avant/après (émissions CO₂ par pays). Voir `DESIGN.md` pour les choix et axes de généralisation.
+- `bar-chart` — ✅ Barres horizontales animées (feature importance ML-Pro)
+- `spaghetti-plot` — ✅ N trajectoires semi-transparentes (runs IAM réels IIASA AR6)

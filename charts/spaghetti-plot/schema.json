@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Spaghetti Plot Data",
+  "description": "N trajectoires par scénario, résolution annuelle",
+  "type": "object",
+  "required": ["years", "scenarios"],
+  "properties": {
+    "years": {
+      "type": "array",
+      "items": { "type": "integer" },
+      "description": "Axe X commun — liste d'années"
+    },
+    "scenarios": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "array",
+          "items": { "type": "number" },
+          "description": "Une trajectoire = tableau de valeurs (même longueur que years)"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "title": "Trajectoires de décarbonation — 2025 à 2050",
+  "subtitle": "Source : IIASA AR6 Scenario Explorer · runs IAM individuels (C1/C3/C7)",
+  "unit": "GtCO₂/an",
+  "canvas": {
+    "maxWidth": 1000,
+    "height": 500
+  },
+  "yRange": [-10, 70],
+  "scenarios": [
+    { "key": "+1.5°C", "color": [210, 80, 80], "dash": [] },
+    { "key": "+2°C",   "color": [30, 90, 90],  "dash": [8, 4] },
+    { "key": "+3°C",   "color": [0, 85, 85],   "dash": [3, 3] }
+  ],
+  "lineAlpha": 12,
+  "medianAlpha": 90,
+  "animation": {
+    "speed": 0.02
+  }
+}
