@@ -52,7 +52,7 @@ ML engineer solide. JS notions de base. p5.js en cours d'apprentissage. D3 incon
 
 ## Documentation
 - Vault Obsidian SecondBrain : `~/Documents/SecondBrain/`
-- Plan d'apprentissage : `~/Documents/SecondBrain/01-Projects/carbon-witness/Plan Apprentissage.md`
+- Plan d'apprentissage : `~/Documents/SecondBrain/01-Projects/cadence/Plan Apprentissage Cadence.md`
 - Bibliothèque dataviz : `~/Documents/SecondBrain/02-Areas/dev/Bibliothèque Dataviz.md`
 - Notes p5.js : `~/Documents/SecondBrain/02-Areas/dev/p5.js Fondamentaux.md`
 
