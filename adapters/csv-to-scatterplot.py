@@ -22,6 +22,9 @@ agg = df.groupby(["date", "ligne"]).agg(
     defauts=("quantite_defauts", "sum"),
 ).reset_index()
 
+# Filtrer les valeurs aberrantes (défauts négatifs = corrections de stock)
+agg = agg[agg["defauts"] >= 0]
+
 # Convertir en liste de points
 points = []
 for _, row in agg.iterrows():
