@@ -44,6 +44,16 @@ ML engineer solide. JS notions de base. p5.js en cours d'apprentissage. D3 incon
 - Accessibilité : couleur + forme (pas couleur seule)
 - Référence des techniques : `~/Documents/SecondBrain/02-Areas/dev/Bibliothèque Dataviz.md`
 
+## Gestion via GitHub Issues
+Toute modification, suggestion, amélioration ou changement doit être tracé via une issue GitHub.
+- **Avant de coder** : vérifier qu'une issue existe pour le travail. Si non, en créer une.
+- **Nouveau canevas** : créer une issue avec les labels `canvas` + `phase-N`
+- **Bug / amélioration** : créer une issue avec le label `enhancement` ou `bug`
+- **Commit** : référencer l'issue dans le message (`fix #12`, `closes #6`, `ref #8`)
+- **Fin de travail** : fermer l'issue (`gh issue close N --reason completed`)
+- Labels existants : `phase-1`, `phase-2`, `phase-3`, `canvas`, `bug`, `enhancement`
+- Consulter les issues ouvertes : `gh issue list`
+
 ## Stack
 - p5.js pour les canevas animés (phase actuelle)
 - D3.js pour les canevas interactifs (phase suivante)
