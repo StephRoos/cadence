@@ -1,0 +1,23 @@
+{
+  "title": "Production vs Défauts — Lignes industrielles",
+  "subtitle": "Source : Data Mastery 1.1 · production_industrielle.csv",
+  "xLabel": "Quantité produite (unités/jour)",
+  "yLabel": "Quantité de défauts",
+  "canvas": {
+    "maxWidth": 900,
+    "height": 520
+  },
+  "margin": { "top": 70, "right": 40, "bottom": 50, "left": 60 },
+  "colors": {
+    "Ligne_1": [202, 63, 91],
+    "Ligne_2": [24, 100, 84],
+    "Ligne_3": [160, 100, 62]
+  },
+  "dataPath": "../../examples/data-mastery/production-defauts.json",
+  "pointRadius": 2.5,
+  "pointAlpha": 0.7,
+  "animation": {
+    "duration": 800,
+    "stagger": 5
+  }
+}
