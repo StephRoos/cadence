@@ -139,83 +139,180 @@ function buildChart(data, config) {
     .style('pointer-events', 'none')
     .style('opacity', 0)
 
-  // Points — cercles colorés par groupe
+  // --- Points, régressions et interactions ---
   const groups = Object.keys(config.colors)
-
-  g.selectAll('circle')
-    .data(data.points)
-    .join('circle')
-    .attr('cx', d => x(d.x))
-    .attr('cy', innerH)                            // départ en bas (animation)
-    .attr('r', 0)
-    .attr('fill', d => {
-      const c = config.colors[d.group]
-      return c ? hsbToHsl(c[0], c[1], c[2]) : CADENCE_CSS.textSubtle
-    })
-    .attr('opacity', config.pointAlpha)
-    .on('mouseover', function (event, d) {
-      d3.select(this)
-        .attr('r', config.pointRadius * 2)
-        .attr('opacity', 1)
-      tooltip
-        .style('opacity', 0.95)
-        .html(`${d.group}<br>${config.xLabel}: ${d.x}<br>${config.yLabel}: ${d.y}`)
-        .style('left', (event.pageX + 12) + 'px')
-        .style('top', (event.pageY - 10) + 'px')
-    })
-    .on('mouseout', function () {
-      d3.select(this)
-        .attr('r', config.pointRadius)
-        .attr('opacity', config.pointAlpha)
-      tooltip.style('opacity', 0)
-    })
-    // Animation d'entrée
-    .transition()
-    .duration(config.animation.duration)
-    .delay((d, i) => i * config.animation.stagger)
-    .attr('cy', d => y(d.y))
-    .attr('r', config.pointRadius)
-
-  // Lignes de régression — une par groupe, apparaissent après l'animation des points
-  const totalAnimTime = config.animation.duration + data.points.length * config.animation.stagger
   const xDomain = x.domain()
+  const groupDuration = config.animation.duration      // durée par groupe
+  const groupGap = 400                                  // pause entre groupes
+  let activeGroup = null                                // groupe isolé par clic légende
 
-  for (const group of groups) {
+  // Conteneur pour les points (sous le brush)
+  const pointsLayer = g.append('g').attr('class', 'points-layer')
+  // Conteneur pour les régressions
+  const regLayer = g.append('g').attr('class', 'regression-layer')
+
+  // Créer les points et régressions par groupe — animation séquentielle
+  groups.forEach((group, gi) => {
     const pts = data.points.filter(d => d.group === group)
-    const reg = linearRegression(pts)
     const c = config.colors[group]
     const color = hsbToHsl(c[0], c[1], c[2])
+    const groupDelay = gi * (groupDuration + groupGap)  // décalage par groupe
 
-    // Deux points de la droite aux bornes du domaine X
+    // Points du groupe — jitter léger pour séparer les superpositions
+    const jitterX = config.pointRadius * 1.5
+    const jitterY = config.pointRadius * 1.5
+    pointsLayer.selectAll(`.point-${gi}`)
+      .data(pts)
+      .join('circle')
+      .attr('class', `point group-${group}`)
+      .attr('cx', d => x(d.x) + (Math.random() - 0.5) * jitterX)
+      .attr('cy', innerH)
+      .attr('r', 0)
+      .attr('fill', color)
+      .attr('stroke', CADENCE_CSS.bg)
+      .attr('stroke-width', 0.5)
+      .attr('opacity', config.pointAlpha)
+      .on('mouseover', function (event, d) {
+        d3.select(this)
+          .attr('r', config.pointRadius * 2)
+          .attr('opacity', 1)
+        tooltip
+          .style('opacity', 0.95)
+          .html(`${d.group}<br>${config.xLabel}: ${d.x}<br>${config.yLabel}: ${d.y}`)
+          .style('left', (event.pageX + 12) + 'px')
+          .style('top', (event.pageY - 10) + 'px')
+      })
+      .on('mouseout', function () {
+        d3.select(this)
+          .attr('r', config.pointRadius)
+          .attr('opacity', activeGroup && activeGroup !== group ? 0.08 : config.pointAlpha)
+        tooltip.style('opacity', 0)
+      })
+      .transition()
+      .duration(groupDuration)
+      .delay((d, i) => groupDelay + i * config.animation.stagger)
+      .attr('cy', d => y(d.y) + (Math.random() - 0.5) * jitterY)
+      .attr('r', config.pointRadius)
+
+    // Régression — apparaît à la fin de l'animation du groupe
+    const reg = linearRegression(pts)
     const x1 = xDomain[0], x2 = xDomain[1]
-    const y1 = reg.slope * x1 + reg.intercept
-    const y2 = reg.slope * x2 + reg.intercept
+    const y1v = reg.slope * x1 + reg.intercept
+    const y2v = reg.slope * x2 + reg.intercept
+    const regDelay = groupDelay + groupDuration + pts.length * config.animation.stagger
 
-    g.append('line')
-      .attr('x1', x(x1)).attr('y1', y(y1))
-      .attr('x2', x(x2)).attr('y2', y(y2))
+    regLayer.append('line')
+      .attr('class', `reg group-${group}`)
+      .attr('x1', x(x1)).attr('y1', y(y1v))
+      .attr('x2', x(x2)).attr('y2', y(y2v))
       .attr('stroke', color)
       .attr('stroke-width', 1.5)
-      .attr('stroke-dasharray', '6 4')            // tirets — distinguer de la donnée
+      .attr('stroke-dasharray', '6 4')
       .attr('opacity', 0)
       .transition()
-      .delay(totalAnimTime)                        // apparaît après tous les points
-      .duration(600)
+      .delay(regDelay)
+      .duration(400)
       .attr('opacity', 0.8)
+  })
+
+  // --- Amélioration 2 : click légende → isoler un groupe ---
+  function updateVisibility(clickedGroup) {
+    // Toggle : re-clic sur le même groupe = tout réafficher
+    activeGroup = activeGroup === clickedGroup ? null : clickedGroup
+
+    // Points
+    pointsLayer.selectAll('.point')
+      .transition().duration(300)
+      .attr('opacity', d => {
+        if (!activeGroup) return config.pointAlpha
+        return d.group === activeGroup ? config.pointAlpha : 0.08
+      })
+
+    // Régressions
+    regLayer.selectAll('.reg')
+      .transition().duration(300)
+      .attr('opacity', function () {
+        const cls = d3.select(this).attr('class')
+        if (!activeGroup) return 0.8
+        return cls.includes(`group-${activeGroup}`) ? 0.8 : 0.1
+      })
+
+    // Légende — mettre à jour l'opacité des labels
+    legend.selectAll('.legend-row')
+      .transition().duration(300)
+      .attr('opacity', function () {
+        const grp = d3.select(this).datum()
+        if (!activeGroup) return 1
+        return grp === activeGroup ? 1 : 0.3
+      })
   }
 
-  // Légende — forme + couleur + label par groupe
+  // --- Amélioration 3 : brush-to-filter ---
+  function resetPoints() {
+    pointsLayer.selectAll('.point')
+      .transition().duration(300)
+      .attr('opacity', d => {
+        if (activeGroup && d.group !== activeGroup) return 0.08
+        return config.pointAlpha
+      })
+      .attr('r', config.pointRadius)
+  }
+
+  const brush = d3.brush()
+    .extent([[0, 0], [innerW, innerH]])
+    .on('end', function (event) {
+      if (!event.sourceEvent) return          // ignorer appels programmatiques
+      if (!event.selection) {                  // clic sans sélection → reset tout
+        activeGroup = null
+        resetPoints()
+        regLayer.selectAll('.reg')
+          .transition().duration(300).attr('opacity', 0.8)
+        legend.selectAll('.legend-row')
+          .transition().duration(300).attr('opacity', 1)
+        return
+      }
+
+      const [[bx0, by0], [bx1, by1]] = event.selection
+      d3.select(this).call(brush.move, null)  // effacer le rectangle
+
+      pointsLayer.selectAll('.point')
+        .transition().duration(300)
+        .attr('opacity', d => {
+          const px = x(d.x), py = y(d.y)
+          const inside = px >= bx0 && px <= bx1 && py >= by0 && py <= by1
+          if (activeGroup && d.group !== activeGroup) return 0.05
+          return inside ? 1 : 0.08
+        })
+        .attr('r', d => {
+          const px = x(d.x), py = y(d.y)
+          const inside = px >= bx0 && px <= bx1 && py >= by0 && py <= by1
+          return inside ? config.pointRadius * 1.5 : config.pointRadius
+        })
+    })
+
+  g.append('g')
+    .attr('class', 'brush')
+    .call(brush)
+
+
+  // --- Légende interactive ---
   const legend = svg.append('g')
     .attr('transform', `translate(${width - m.right - 130}, ${m.top})`)
 
   groups.forEach((group, i) => {
     const c = config.colors[group]
     const row = legend.append('g')
+      .attr('class', 'legend-row')
+      .datum(group)                                    // associer le nom du groupe
       .attr('transform', `translate(0, ${i * 20})`)
+      .style('cursor', 'pointer')
+      .on('click', () => updateVisibility(group))
+
     row.append('rect')
       .attr('width', 10).attr('height', 10)
       .attr('rx', 5)
       .attr('fill', hsbToHsl(c[0], c[1], c[2]))
+
     row.append('text')
       .attr('x', 16).attr('y', 9)
       .attr('fill', CADENCE_CSS.textMuted)
