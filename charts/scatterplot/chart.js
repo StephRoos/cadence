@@ -295,9 +295,20 @@ function buildChart(data, config) {
     .call(brush)
 
 
-  // --- Légende interactive ---
+  // --- Légende interactive + draggable ---
+  let legendX = width - m.right - 130, legendY = m.top
   const legend = svg.append('g')
-    .attr('transform', `translate(${width - m.right - 130}, ${m.top})`)
+    .attr('transform', `translate(${legendX}, ${legendY})`)
+    .style('cursor', 'grab')
+    .call(d3.drag()
+      .on('start', function () { d3.select(this).style('cursor', 'grabbing') })
+      .on('drag', function (event) {
+        legendX += event.dx
+        legendY += event.dy
+        d3.select(this).attr('transform', `translate(${legendX}, ${legendY})`)
+      })
+      .on('end', function () { d3.select(this).style('cursor', 'grab') })
+    )
 
   groups.forEach((group, i) => {
     const c = config.colors[group]
