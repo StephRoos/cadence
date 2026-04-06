@@ -90,30 +90,30 @@ let progression = 0  // 0→1 : avancement global de l'animation
 let paused = false
 
 function draw() {
-  background(240, 30, 10)  // fond sombre — même teinte que animated-line
+  background(...CADENCE.bg)
 
   // Titre
   noStroke()
-  fill(0, 0, 80)
-  textFont('monospace')
+  fill(...CADENCE.text)
+  textFont(CADENCE.font, CADENCE.fontFallback)
   textSize(14)
   textAlign(LEFT, BASELINE)
   text(config.title, margin.left, 30)
 
   // Sous-titre (source)
-  fill(0, 0, 40)
-  textSize(10)
+  fill(...CADENCE.textMuted)
+  textSize(12)
   text(config.subtitle, margin.left, 48)
 
   // En-têtes des deux colonnes — "2000" à gauche, "2023" à droite
-  fill(0, 0, 60)
+  fill(...CADENCE.textSubtle)
   textSize(12)
   textAlign(CENTER, BASELINE)
   text(config.startLabel, startX(), 68)
   text(config.endLabel, endX(), 68)
 
   // Lignes verticales de repère — très discrètes
-  stroke(0, 0, 30, 25)
+  stroke(...CADENCE.gridLine)
   strokeWeight(1)
   line(startX(), margin.top, startX(), height - margin.bottom)
   line(endX(), margin.top, endX(), height - margin.bottom)
@@ -190,7 +190,7 @@ function draw() {
     if (t >= 1) ellipse(endX(), y2, 6)         // point droit — quand la ligne arrive
 
     // Label gauche — apparaît dès que la ligne démarre
-    textSize(11)
+    textSize(12)
     textAlign(RIGHT, CENTER)
     text(p.label + '  ' + p.start, startX() - 10, leftY[i])
 
@@ -224,7 +224,7 @@ function draw() {
       const sign = delta >= 0 ? '+' : ''
 
       // Surbrillance de la ligne
-      stroke(0, 0, 90, 40)
+      stroke(...CADENCE.text, 40)
       strokeWeight(5)
       line(startX(), valToY(p.start), endX(), valToY(p.end))
 
@@ -232,24 +232,24 @@ function draw() {
       const tx = mouseX + 12
       const ty = lineY - 10
       noStroke()
-      fill(240, 30, 8, 92)
+      fill(...CADENCE.bgCard, 92)
       rect(tx, ty, 100, 36, 3)
-      fill(0, 0, 95)
-      textSize(11)
-      textFont('monospace')
+      fill(...CADENCE.text)
+      textSize(12)
+      textFont(CADENCE.font, CADENCE.fontFallback)
       textAlign(LEFT, CENTER)
       text(p.label, tx + 6, ty + 10)
-      fill(0, 0, 65)
-      textSize(10)
+      fill(...CADENCE.textMuted)
+      textSize(12)
       text(sign + delta.toFixed(1) + ' ' + config.unit, tx + 6, ty + 25)
     }
   }
 
   // Hint de contrôle — apparaît quand l'animation est terminée
   if (progression >= 1) {
-    fill(0, 0, 40, 50 + 20 * sin(frameCount * 0.04))
+    fill(...CADENCE.textMuted, 50 + 20 * sin(frameCount * 0.04))
     noStroke()
-    textSize(10)
+    textSize(12)
     textAlign(CENTER, BASELINE)
     text('double-clic pour relancer · espace = pause', width / 2, height - 10)
   }

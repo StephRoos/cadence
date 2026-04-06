@@ -44,36 +44,36 @@ function dessinerCourbeHistorique() {
 }
 
 function draw() {
-  background(240, 30, 10)
+  background(...CADENCE.bg)
 
   // titre
   noStroke()
-  fill(0, 0, 80)
-  textFont('monospace')
+  fill(...CADENCE.text)
+  textFont(CADENCE.font, CADENCE.fontFallback)
   textSize(14)
   textAlign(LEFT, BASELINE)
   text('Émissions mondiales de CO₂ (GtCO₂/an)', 50, 30)
-  fill(0, 0, 40)
-  textSize(10)
+  fill(...CADENCE.textMuted)
+  textSize(12)
   textAlign(RIGHT, BASELINE)
   text('Sources : OWID/GCP · IPCC AR6 IIASA (C1/C3/C6)', width - 10, 44)
   textAlign(LEFT, BASELINE)
 
   // label axe Y
-  fill(0, 0, 45)
-  textSize(9)
+  fill(...CADENCE.textSubtle)
+  textSize(12)
   textAlign(LEFT, BASELINE)
   text('GtCO₂/an', 6, gtToY(50) - 8)
 
   // grille horizontale — étendue jusqu'à 2050
   const yTicks = [0, 10, 20, 30, 40, 50]
   for (let i = 0; i < yTicks.length; i++) {
-    stroke(0, 0, 15)
+    stroke(...CADENCE.gridLine)
     strokeWeight(1)
     line(50, gtToY(yTicks[i]), yearToX(2050), gtToY(yTicks[i]))
     noStroke()
-    fill(0, 0, 53)
-    textSize(11)
+    fill(...CADENCE.axisLabel)
+    textSize(12)
     textAlign(LEFT, CENTER)
     text(yTicks[i], 10, gtToY(yTicks[i]))
   }
@@ -81,12 +81,12 @@ function draw() {
   // axe X
   const xTicks = [1960, 1970, 1980, 1990, 2000, 2010, 2020, 2030, 2040, 2050]
   for (let i = 0; i < xTicks.length; i++) {
-    stroke(0, 0, 27)
+    stroke(...CADENCE.gridLine)
     strokeWeight(1)
     line(yearToX(xTicks[i]), height - 45, yearToX(xTicks[i]), height - 35)
     noStroke()
-    fill(0, 0, 53)
-    textSize(11)
+    fill(...CADENCE.axisLabel)
+    textSize(12)
     textAlign(LEFT, BASELINE)
     text(xTicks[i], yearToX(xTicks[i]) - 15, height - 20)
   }
@@ -108,14 +108,14 @@ function draw() {
     const evY  = gtToY(data[evIdx].gt)
 
     // ligne du bas jusqu'au point de la courbe
-    stroke(0, 0, 27)
+    stroke(...CADENCE.gridLine)
     strokeWeight(1)
     line(evX, height - 50, evX, evY)
 
     // label au-dessus du point
     noStroke()
-    fill(0, 0, 50)
-    textSize(10)
+    fill(...CADENCE.textSubtle)
+    textSize(12)
     textAlign(RIGHT, BASELINE)
     text(ev.label, evX - 4, evY + ev.offset)
   }
@@ -140,15 +140,15 @@ function draw() {
   // 2 & 3 — année + GtCO₂ — masqués une fois la courbe terminée (2025)
   if (progression < data.length - 1) {
     noStroke()
-    fill(240, 30, 8, 85)
+    fill(...CADENCE.bgCard, 85)
     rect(ptX + 8, ptY - 8, 58, 26, 3)
-    fill(0, 0, 95)
-    textSize(11)
-    textFont('monospace')
+    fill(...CADENCE.text)
+    textSize(12)
+    textFont(CADENCE.font, CADENCE.fontFallback)
     textAlign(LEFT, CENTER)
     text(data[idx].year, ptX + 12, ptY)
-    fill(0, 0, 65)
-    textSize(10)
+    fill(...CADENCE.textMuted)
+    textSize(12)
     text(data[idx].gt.toFixed(1) + ' Gt', ptX + 12, ptY + 13)
   }
 
@@ -157,15 +157,15 @@ function draw() {
     if (!paused) pauseFrames = min(pauseFrames + 1, 60)
     const sepAlpha = min(pauseFrames / 20, 1)  // fade-in sur 20 frames
     const sepX = yearToX(2025)
-    stroke(0, 0, 30, 60 * sepAlpha)
+    stroke(...CADENCE.gridLine, 60 * sepAlpha)
     strokeWeight(1)
     drawingContext.setLineDash([3, 4])
     line(sepX, 55, sepX, height - 50)
     drawingContext.setLineDash([])
     noStroke()
     const pulseAlpha = 70 * sepAlpha * (0.6 + 0.4 * sin(frameCount * 0.05))  // pulse doux
-    fill(0, 0, 45, pulseAlpha)
-    textSize(9)
+    fill(...CADENCE.textSubtle, pulseAlpha)
+    textSize(12)
     textAlign(LEFT, BASELINE)
     text('projections →', sepX + 4, 63)
   }
@@ -253,7 +253,7 @@ function draw() {
       if (anneeScenarios >= 2050) {
         noStroke()
         fill(c[0], c[1], c[2])
-        textSize(10)
+        textSize(12)
         textAlign(LEFT, CENTER)
         text(labels[s], yearToX(2051), gtToY(sc.points[sc.points.length - 1].median))
       }
@@ -266,15 +266,15 @@ function draw() {
     if (anneeScenarios >= 2050 && fadeScenarios >= 1) {
       const lx = width - 90
       noStroke()
-      fill(0, 0, 50, 25)
+      fill(...CADENCE.textSubtle, 25)
       rect(lx, 52, 10, 8, 1)
-      fill(0, 0, 45)
-      textSize(9)
+      fill(...CADENCE.textSubtle)
+      textSize(12)
       textAlign(LEFT, BASELINE)
       text('p25–p75', lx + 14, 59)
-      fill(0, 0, 50, 12)
+      fill(...CADENCE.textSubtle, 12)
       rect(lx, 64, 10, 8, 1)
-      fill(0, 0, 45)
+      fill(...CADENCE.textSubtle)
       text('p05–p95', lx + 14, 71)
     }
 
@@ -292,7 +292,7 @@ function draw() {
         const hx = yearToX(data[hoverIdx].year)
         const hy = gtToY(data[hoverIdx].gt)
 
-        stroke(0, 0, 40, 40)
+        stroke(...CADENCE.textMuted, 40)
         strokeWeight(1)
         line(hx, 55, hx, height - 50)
 
@@ -300,15 +300,15 @@ function draw() {
         fill(25, 90, 100, 70)
         ellipse(hx, hy, 6)
 
-        fill(240, 30, 8, 90)
+        fill(...CADENCE.bgCard, 90)
         rect(hx + 8, hy - 10, 62, 28, 3)
-        fill(0, 0, 95)
-        textSize(11)
-        textFont('monospace')
+        fill(...CADENCE.text)
+        textSize(12)
+        textFont(CADENCE.font, CADENCE.fontFallback)
         textAlign(LEFT, CENTER)
         text(data[hoverIdx].year, hx + 12, hy - 1)
-        fill(0, 0, 65)
-        textSize(10)
+        fill(...CADENCE.textMuted)
+        textSize(12)
         text(data[hoverIdx].gt.toFixed(1) + ' Gt', hx + 12, hy + 12)
 
       } else if (scenariosData && hoverYear >= 2026) {
@@ -316,7 +316,7 @@ function draw() {
         const hx = yearToX(hoverYear)
         const scIdx = constrain(hoverYear - 2025, 0, scenariosData[0].points.length - 1)
 
-        stroke(0, 0, 40, 40)
+        stroke(...CADENCE.textMuted, 40)
         strokeWeight(1)
         line(hx, 55, hx, height - 50)
 
@@ -326,12 +326,12 @@ function draw() {
         const tx = min(hx + 12, width - tooltipW - 10)  // ne pas déborder à droite
         const ty = 60
         noStroke()
-        fill(240, 30, 8, 92)
+        fill(...CADENCE.bgCard, 92)
         rect(tx, ty, tooltipW, tooltipH, 3)
 
-        fill(0, 0, 95)
-        textSize(11)
-        textFont('monospace')
+        fill(...CADENCE.text)
+        textSize(12)
+        textFont(CADENCE.font, CADENCE.fontFallback)
         textAlign(LEFT, CENTER)
         text(hoverYear, tx + 6, ty + 10)
 
@@ -340,8 +340,8 @@ function draw() {
           const c  = scenariosData[s].couleur
           const pt = scenariosData[s].points[scIdx]
           fill(c[0], c[1], c[2])
-          textSize(9)
-          text(scLabels[s] + ' ' + pt.median.toFixed(1) + ' Gt', tx + 6, ty + 24 + s * 11)
+          textSize(12)
+          text(scLabels[s] + ' ' + pt.median.toFixed(1) + ' Gt', tx + 6, ty + 24 + s * 13)
           noStroke()
           ellipse(hx, gtToY(pt.median), 3)       // point discret sur chaque médiane
         }
@@ -350,9 +350,9 @@ function draw() {
 
     // hint de replay une fois l'animation terminée
     if (anneeScenarios >= 2050 && fadeScenarios >= 1) {
-      fill(0, 0, 40, 50 + 20 * sin(frameCount * 0.04))
+      fill(...CADENCE.textMuted, 50 + 20 * sin(frameCount * 0.04))
       noStroke()
-      textSize(10)
+      textSize(12)
       textAlign(CENTER, BASELINE)
       text('double-clic pour relancer · espace = pause · ←→ = année', width / 2, height - 5)
     }

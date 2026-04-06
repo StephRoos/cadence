@@ -44,23 +44,30 @@ function barH() {
   return (zone / sorted.length) * 0.6
 }
 
+// Formater une valeur selon config.valueFormat (".3f" → 3 décimales, ".1f" → 1, etc.)
+function formatValue(val) {
+  const fmt = config.valueFormat || '.2f'
+  const decimals = parseInt(fmt.replace(/\D/g, ''))           // extraire le nombre de ".3f"
+  return val.toFixed(decimals)
+}
+
 let progression = 0
 let paused = false
 
 function draw() {
-  background(240, 33, 18)  // CADENCE.bg — Charcoal Dark
+  background(...CADENCE.bg)
 
   // Titre
   noStroke()
-  fill(190, 10, 97)        // CADENCE.text — Teal Pale
-  textFont('monospace')
+  fill(...CADENCE.text)
+  textFont(CADENCE.font, CADENCE.fontFallback)
   textSize(14)
   textAlign(LEFT, BASELINE)
   text(config.title, margin.left, 28)
 
   // Sous-titre
-  fill(215, 20, 72)        // CADENCE.textMuted — Slate Light
-  textSize(10)
+  fill(...CADENCE.textMuted)
+  textSize(12)
   text(config.subtitle, margin.left, 46)
 
   // Avancer l'animation
@@ -80,27 +87,31 @@ function draw() {
     const h = barH()
     const barWidth = (valToX(b.value) - margin.left) * t     // largeur animée
 
-    // Barre
+    // Barre — highlight en teal vif, les autres en teinte neutre
     noStroke()
     if (isHighlight) {
-      fill(config.colors.highlight[0], config.colors.highlight[1], config.colors.highlight[2])
+      const c = config.colors.highlight
+      fill(c[0], c[1], c[2])
     } else {
-      fill(config.colors.bar[0], config.colors.bar[1], config.colors.bar[2])
+      const c = config.colors.bar
+      fill(c[0], c[1], c[2])
     }
     rect(margin.left, y - h / 2, barWidth, h, 0, 3, 3, 0)   // coins arrondis à droite
 
-    // Label gauche — nom de la feature
-    fill(isHighlight ? [190, 10, 97] : [215, 20, 72])
-    textSize(11)
+    // Label gauche
+    fill(...CADENCE.text)
+    textSize(12)
     textAlign(RIGHT, CENTER)
+    if (isHighlight) textStyle(BOLD)                           // 2e canal : bold pour le highlight
     text(b.label, margin.left - 8, y)
+    textStyle(NORMAL)
 
     // Valeur à droite de la barre — apparaît quand l'animation est terminée
     if (t >= 1) {
-      fill(215, 20, 72)
-      textSize(10)
+      fill(...CADENCE.textMuted)
+      textSize(12)
       textAlign(LEFT, CENTER)
-      text(b.value.toFixed(3), margin.left + barWidth + 6, y)
+      text(formatValue(b.value), margin.left + barWidth + 6, y)
     }
   }
 
@@ -120,21 +131,21 @@ function draw() {
         // Tooltip
         const tx = mouseX + 12
         const ty = y - 20
-        fill(240, 31, 22, 92)   // CADENCE.bgCard
+        fill(...CADENCE.bgCard, 92)
         rect(tx, ty, 80, 28, 3)
-        fill(190, 10, 97)
-        textSize(11)
-        textFont('monospace')
+        fill(...CADENCE.text)
+        textSize(12)
+        textFont(CADENCE.font, CADENCE.fontFallback)
         textAlign(LEFT, CENTER)
-        text(sorted[i].value.toFixed(3), tx + 8, ty + 14)
+        text(formatValue(sorted[i].value), tx + 8, ty + 14)
         break
       }
     }
 
     // Hint
-    fill(215, 20, 72, 50 + 20 * sin(frameCount * 0.04))
+    fill(...CADENCE.textMuted, 50 + 20 * sin(frameCount * 0.04))
     noStroke()
-    textSize(10)
+    textSize(12)
     textAlign(CENTER, BASELINE)
     text('double-clic pour relancer · espace = pause', width / 2, height - 8)
   }
