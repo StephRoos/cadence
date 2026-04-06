@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "scatterplot",
+  "description": "Nuage de points catégoriel avec régression linéaire par groupe",
+  "type": "object",
+  "properties": {
+    "points": {
+      "type": "array",
+      "description": "Une entrée par observation",
+      "items": {
+        "type": "object",
+        "properties": {
+          "x": { "type": "number" },
+          "y": { "type": "number" },
+          "group": { "type": "string", "description": "Catégorie (doit correspondre à une clé de config.colors)" }
+        },
+        "required": ["x", "y", "group"]
+      }
+    }
+  },
+  "required": ["points"]
+}
