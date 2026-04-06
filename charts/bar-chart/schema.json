@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "bar-chart",
+  "description": "Barres horizontales triées — classement, feature importance, comparaison",
+  "type": "object",
+  "properties": {
+    "bars": {
+      "type": "array",
+      "description": "Une entrée par barre",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "value": { "type": "number" }
+        },
+        "required": ["label", "value"]
+      }
+    }
+  },
+  "required": ["bars"]
+}

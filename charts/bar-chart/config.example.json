@@ -1,0 +1,22 @@
+{
+  "title": "Feature Importance — Arbre de décision",
+  "subtitle": "Source : Formation ML-Pro · Breast Cancer Wisconsin (sklearn)",
+  "unit": "",
+  "valueFormat": ".3f",
+  "canvas": {
+    "maxWidth": 900,
+    "height": 500
+  },
+  "sortBy": "descending",
+  "maxBars": 10,
+  "highlight": ["worst radius"],
+  "colors": {
+    "highlight": [189, 94, 71],
+    "bar": [215, 28, 55],
+    "barHover": [189, 94, 71]
+  },
+  "animation": {
+    "speed": 0.008,
+    "stagger": 0.06
+  }
+}

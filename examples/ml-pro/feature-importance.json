@@ -1,0 +1,23 @@
+{
+  "meta": {
+    "source": "Formation ML-Pro · 3.2 Arbres de décision",
+    "model": "DecisionTreeClassifier (sklearn)",
+    "dataset": "Breast Cancer Wisconsin",
+    "repo": "https://github.com/Formation-ML-Pro/3.2-Arbres-de-decision"
+  },
+  "bars": [
+    { "label": "worst radius",          "value": 0.696 },
+    { "label": "worst concave points",  "value": 0.107 },
+    { "label": "worst texture",         "value": 0.084 },
+    { "label": "concavity error",       "value": 0.032 },
+    { "label": "worst smoothness",      "value": 0.014 },
+    { "label": "mean compactness",      "value": 0.013 },
+    { "label": "mean texture",          "value": 0.011 },
+    { "label": "worst area",            "value": 0.011 },
+    { "label": "area error",            "value": 0.009 },
+    { "label": "mean concave points",   "value": 0.009 },
+    { "label": "worst concave points err", "value": 0.008 },
+    { "label": "mean smoothness",       "value": 0.006 },
+    { "label": "smoothness error",      "value": 0.001 }
+  ]
+}
