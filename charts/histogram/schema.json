@@ -27,11 +27,21 @@
       "properties": {
         "mean":   { "type": ["number", "null"] },
         "median": { "type": ["number", "null"] },
+        "std":    { "type": ["number", "null"], "description": "Écart-type (sample std, N-1)" },
         "q1":     { "type": ["number", "null"], "description": "Premier quartile (25%) — utilisé pour le boxplot optionnel" },
         "q3":     { "type": ["number", "null"], "description": "Troisième quartile (75%) — utilisé pour le boxplot optionnel" },
         "min":    { "type": ["number", "null"] },
         "max":    { "type": ["number", "null"] },
-        "count":  { "type": "integer", "minimum": 0 }
+        "count":  { "type": "integer", "minimum": 0 },
+        "whisker_low":  { "type": ["number", "null"], "description": "Valeur adjacente basse — moustache inférieure du boxplot (Tukey)" },
+        "whisker_high": { "type": ["number", "null"], "description": "Valeur adjacente haute — moustache supérieure du boxplot (Tukey)" },
+        "outliers": {
+          "type": "array",
+          "items": { "type": "number" },
+          "description": "Valeurs hors [Q1-1.5·IQR, Q3+1.5·IQR], capées aux plus extrêmes (max ~100 points)"
+        },
+        "outliers_low_count":  { "type": "integer", "minimum": 0 },
+        "outliers_high_count": { "type": "integer", "minimum": 0 }
       },
       "required": ["count"]
     }

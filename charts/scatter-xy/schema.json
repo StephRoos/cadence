@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "scatter-xy",
+  "description": "Nuage de points num × num avec régression OLS globale et hue catégoriel optionnel.",
+  "type": "object",
+  "properties": {
+    "x": { "type": "string" },
+    "y": { "type": "string" },
+    "points": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "x": { "type": "number" },
+          "y": { "type": "number" },
+          "group": { "type": "string" }
+        },
+        "required": ["x", "y", "group"]
+      }
+    },
+    "total": { "type": "integer" },
+    "sampled": { "type": "integer" },
+    "regression": {
+      "type": ["object", "null"],
+      "properties": {
+        "slope": { "type": "number" },
+        "intercept": { "type": "number" },
+        "r2": { "type": "number" }
+      }
+    },
+    "groups": { "type": "array", "items": { "type": "string" } },
+    "hue": { "type": ["string", "null"] }
+  },
+  "required": ["x", "y", "points"]
+}

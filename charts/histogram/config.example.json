@@ -20,7 +20,7 @@
 
   "animation": {
     "enabled": true,
-    "durationMs": 800,
+    "durationMs": 1500,
     "easing": "cubicOut",
     "stagger": 15
   },

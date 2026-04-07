@@ -99,9 +99,12 @@ const bars = g.selectAll("rect.bar")
   .attr("fill", config.colors.bar)
   .attr("y", histHeight).attr("height", 0)
 
+// Animation : toutes les barres montent simultanément depuis y=0 (pas de
+// stagger) pour que l'œil perçoive la distribution comme un tout, pas comme
+// une séquence. Le boxplot sous l'histogramme anime en parallèle (même
+// durée) pour renforcer le couplage visuel des deux vues.
 bars.transition()
   .duration(config.animation.durationMs)
-  .delay((d, i) => i * config.animation.stagger)
   .ease(d3.easeCubicOut)
   .attr("y", d => y(d.count))
   .attr("height", d => histHeight - y(d.count))
@@ -200,38 +203,110 @@ if (hasBoxplot) {
   const cy = histHeight + BOX_GAP + BOX_BAND_HEIGHT / 2
   const boxH = BOX_BAND_HEIGHT * 0.7
   const top = cy - boxH / 2
-  const xMin = x(data.stats.min), xMax = x(data.stats.max)
+  // Moustaches Tukey : jusqu'aux valeurs adjacentes à ±1.5·IQR (pas min/max).
+  // Fallback min/max si le backend n'a pas fourni les whiskers (canevas plus
+  // récent que l'endpoint, ou données externes sans la convention Tukey).
+  const wLow = data.stats.whisker_low ?? data.stats.min
+  const wHigh = data.stats.whisker_high ?? data.stats.max
+  const xWLow = x(wLow), xWHigh = x(wHigh)
   const xQ1 = x(data.stats.q1), xQ3 = x(data.stats.q3)
   const xMed = x(data.stats.median)
 
+  // Boxplot construit en parallèle des barres, en s'étendant depuis la
+  // médiane vers l'extérieur. L'idée : la distribution "s'ouvre" sur la
+  // même durée que les barres montent, donc l'œil voit les deux vues
+  // converger vers leur état final au même instant.
+  const duration = config.animation.durationMs
   const box = g.append("g").attr("class", "boxplot")
 
-  // Moustache horizontale (min → max), passe derrière la boîte.
+  // Moustache horizontale — part de la médiane, s'étend vers les whiskers.
   box.append("line")
-    .attr("x1", xMin).attr("x2", xMax).attr("y1", cy).attr("y2", cy)
+    .attr("x1", xMed).attr("x2", xMed).attr("y1", cy).attr("y2", cy)
     .attr("stroke", config.colors.axis).attr("stroke-width", 1)
+    .transition().duration(duration).ease(d3.easeCubicOut)
+    .attr("x1", xWLow).attr("x2", xWHigh)
 
-  // Caps verticaux aux extrémités min et max.
-  for (const px of [xMin, xMax]) {
+  // Caps verticaux : partent eux aussi de la médiane, suivent les bouts
+  // de moustaches jusqu'à leur position finale.
+  for (const px of [xWLow, xWHigh]) {
     box.append("line")
-      .attr("x1", px).attr("x2", px)
+      .attr("x1", xMed).attr("x2", xMed)
       .attr("y1", cy - boxH / 3).attr("y2", cy + boxH / 3)
       .attr("stroke", config.colors.axis).attr("stroke-width", 1)
+      .transition().duration(duration).ease(d3.easeCubicOut)
+      .attr("x1", px).attr("x2", px)
   }
 
-  // Boîte Q1-Q3 (l'IQR).
+  // Outliers : points individuels hors [whisker_low, whisker_high].
+  // Fade in progressif — délai proportionnel à la distance à la médiane,
+  // pour que l'animation "pousse" depuis le centre vers les extrémités en
+  // parallèle de l'ouverture du boxplot.
+  const outliers = data.stats.outliers || []
+  if (outliers.length > 0) {
+    const maxDistPx = Math.max(
+      Math.abs(xWLow - xMed),
+      Math.abs(xWHigh - xMed),
+      ...outliers.map(o => Math.abs(x(o) - xMed)),
+    )
+    box.selectAll("circle.outlier")
+      .data(outliers)
+      .join("circle")
+      .attr("class", "outlier")
+      .attr("cx", d => x(d))
+      .attr("cy", cy)
+      .attr("r", 2.5)
+      .attr("fill", config.colors.axis)
+      .attr("opacity", 0)
+      .each(function (d) {
+        d3.select(this).append("title").text(fmtVal(d))
+      })
+      .transition()
+      .duration(250)
+      .delay(d => {
+        const dist = Math.abs(x(d) - xMed)
+        return (dist / maxDistPx) * Math.max(0, duration - 250)
+      })
+      .ease(d3.easeCubicOut)
+      .attr("opacity", 0.55)
+  }
+
+  // Mention "+N" si la liste a été capée côté backend (dataset très outlier-dense).
+  const lowN = data.stats.outliers_low_count ?? 0
+  const highN = data.stats.outliers_high_count ?? 0
+  const OUT_CAP = 50  // doit rester aligné avec la constante backend
+  if (lowN > OUT_CAP) {
+    box.append("text")
+      .attr("x", 0).attr("y", cy - boxH / 2 - 4)
+      .attr("fill", config.colors.axis).attr("font-size", 9).attr("text-anchor", "start")
+      .text(`+${lowN - OUT_CAP} outliers bas`)
+  }
+  if (highN > OUT_CAP) {
+    box.append("text")
+      .attr("x", width).attr("y", cy - boxH / 2 - 4)
+      .attr("fill", config.colors.axis).attr("font-size", 9).attr("text-anchor", "end")
+      .text(`+${highN - OUT_CAP} outliers hauts`)
+  }
+
+  // Boîte Q1-Q3 (l'IQR) — grandit symétriquement à partir de la médiane.
   box.append("rect")
-    .attr("x", xQ1).attr("y", top)
-    .attr("width", Math.max(1, xQ3 - xQ1)).attr("height", boxH)
+    .attr("x", xMed).attr("y", top)
+    .attr("width", 0).attr("height", boxH)
     .attr("fill", config.colors.bar).attr("opacity", 0.6)
     .attr("stroke", config.colors.axis).attr("stroke-width", 1)
+    .transition().duration(duration).ease(d3.easeCubicOut)
+    .attr("x", xQ1).attr("width", Math.max(1, xQ3 - xQ1))
 
-  // Ligne médiane à l'intérieur de la boîte.
+  // Ligne médiane à l'intérieur de la boîte — fade in sur la même durée
+  // (position fixe, pas de mouvement : c'est le point d'ancrage visuel).
   box.append("line")
     .attr("x1", xMed).attr("x2", xMed).attr("y1", top).attr("y2", top + boxH)
     .attr("stroke", config.colors.median).attr("stroke-width", 2)
+    .attr("opacity", 0)
+    .transition().duration(duration).ease(d3.easeCubicOut)
+    .attr("opacity", 1)
 
   // Moyenne : losange (convention R/matplotlib/seaborn) au centre vertical.
+  // Fade in sur la même durée pour rester synchrone avec le reste.
   if (data.stats.mean != null) {
     const xMean = x(data.stats.mean)
     const r = boxH / 3
@@ -239,10 +314,19 @@ if (hasBoxplot) {
       .attr("d", `M ${xMean} ${cy - r} L ${xMean + r} ${cy} L ${xMean} ${cy + r} L ${xMean - r} ${cy} Z`)
       .attr("fill", config.colors.mean)
       .attr("stroke", config.colors.background).attr("stroke-width", 1)
+      .attr("opacity", 0)
+      .transition().duration(duration).ease(d3.easeCubicOut)
+      .attr("opacity", 1)
   }
 }
 
-// --- Stats box (coin haut-droit) ---
+// --- Stats box (coin haut-droit, déplaçable + masquable) ---
+// Convention UX : le carton de stats est une annotation, pas une donnée.
+// L'utilisateur peut le traîner n'importe où (ex : pour libérer une zone
+// de barres) ou le fermer via le × en coin s'il encombre. L'état n'est
+// pas persisté — chaque remount (changement de data, de granularité) le
+// remet à sa position par défaut. Volontaire : pas de localStorage pour
+// éviter des surprises quand l'utilisateur revient à un dataset.
 if (config.overlays.showStatsBox) {
   const stats = [
     ["n", fmtN(data.stats.count)],
@@ -251,14 +335,35 @@ if (config.overlays.showStatsBox) {
     ["moy.", fmtVal(data.stats.mean)],
     ["méd.", fmtVal(data.stats.median)],
   ]
+  if (data.stats.std != null) stats.push(["écart-type", fmtVal(data.stats.std)])
   if (data.stats.q1 != null) stats.push(["Q1", fmtVal(data.stats.q1)])
   if (data.stats.q3 != null) stats.push(["Q3", fmtVal(data.stats.q3)])
   const boxW = 140, boxH = 16 + stats.length * 14
+  // Position initiale stockée dans des variables mutables : le drag handler
+  // les incrémente avec event.dx/dy et réapplique le transform.
+  let dragX = config.canvas.maxWidth - boxW - margin.right
+  let dragY = margin.top + 8
   const box = svg.append("g")
-    .attr("transform", `translate(${config.canvas.maxWidth - boxW - margin.right}, ${margin.top + 8})`)
+    .attr("class", "stats-box")
+    .attr("transform", `translate(${dragX}, ${dragY})`)
+    .style("cursor", "move")
+
+  // D3 drag : on filtre les events démarrant sur le bouton fermer pour
+  // ne pas déclencher un drag accidentel lors d'un clic sur le ×.
+  box.call(
+    d3.drag()
+      .filter((event) => !event.target.closest(".close-btn"))
+      .on("drag", (event) => {
+        dragX += event.dx
+        dragY += event.dy
+        box.attr("transform", `translate(${dragX}, ${dragY})`)
+      }),
+  )
+
   box.append("rect")
     .attr("width", boxW).attr("height", boxH).attr("rx", 4)
     .attr("fill", config.colors.background).attr("stroke", config.colors.grid)
+
   stats.forEach(([k, v], i) => {
     box.append("text")
       .attr("x", 10).attr("y", 16 + i * 14)
@@ -268,4 +373,20 @@ if (config.overlays.showStatsBox) {
       .attr("fill", config.colors.text).attr("font-size", 10).attr("font-family", "monospace")
       .text(v)
   })
+
+  // Bouton fermer : petit × en haut à droite. Cercle transparent pour
+  // agrandir la cible de clic (accessibilité), texte × visible par-dessus.
+  const closeBtn = box.append("g")
+    .attr("class", "close-btn")
+    .style("cursor", "pointer")
+    .on("click", () => box.remove())
+  closeBtn.append("circle")
+    .attr("cx", boxW - 10).attr("cy", 10).attr("r", 8)
+    .attr("fill", "transparent")
+  closeBtn.append("text")
+    .attr("x", boxW - 10).attr("y", 11)
+    .attr("text-anchor", "middle").attr("dominant-baseline", "central")
+    .attr("fill", config.colors.axis).attr("font-size", 14).attr("font-weight", 600)
+    .text("×")
+    .append("title").text("Masquer")
 }

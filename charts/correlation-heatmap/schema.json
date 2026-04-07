@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "correlation-heatmap",
+  "description": "Matrice d'association mixte (num + cat). Chaque cellule porte sa force dans [0,1], sa méthode, et le signe éventuel (Pearson/Spearman num×num).",
+  "type": "object",
+  "properties": {
+    "columns": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "types": {
+      "type": "array",
+      "items": { "enum": ["num", "cat"] },
+      "description": "Type de chaque colonne, même ordre que `columns`"
+    },
+    "matrix": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "items": {
+          "type": ["object", "null"],
+          "properties": {
+            "strength": { "type": ["number", "null"] },
+            "signed":   { "type": ["number", "null"] },
+            "method":   { "enum": ["pearson", "spearman", "cramer", "eta", "diag"] }
+          },
+          "required": ["strength", "method"]
+        }
+      }
+    },
+    "method": {
+      "type": "string",
+      "enum": ["pearson", "spearman"],
+      "description": "Méthode utilisée pour les paires num×num"
+    },
+    "excluded": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name":   { "type": "string" },
+          "reason": { "type": "string" }
+        }
+      }
+    }
+  },
+  "required": ["columns", "types", "matrix", "method"]
+}

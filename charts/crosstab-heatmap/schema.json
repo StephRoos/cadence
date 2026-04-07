@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "crosstab-heatmap",
+  "description": "Table de contingence entre deux variables catégorielles. Calculée côté producteur (top N × top N modalités).",
+  "type": "object",
+  "properties": {
+    "a": { "type": "string", "description": "Nom de la variable en lignes" },
+    "b": { "type": "string", "description": "Nom de la variable en colonnes" },
+    "rows": { "type": "array", "description": "Modalités de a (ordre = lignes)" },
+    "cols": { "type": "array", "description": "Modalités de b (ordre = colonnes)" },
+    "counts": {
+      "type": "array",
+      "description": "Effectifs bruts — rows × cols",
+      "items": { "type": "array", "items": { "type": "integer" } }
+    },
+    "row_ratios": {
+      "type": "array",
+      "description": "Profils conditionnels par ligne — utilisés pour colorer",
+      "items": { "type": "array", "items": { "type": "number" } }
+    },
+    "total": { "type": "integer" },
+    "a_unique": { "type": "integer" },
+    "b_unique": { "type": "integer" },
+    "truncated": { "type": "boolean" }
+  },
+  "required": ["a", "b", "rows", "cols", "counts", "row_ratios"]
+}

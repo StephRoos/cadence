@@ -1,0 +1,17 @@
+{
+  "title": "Nuage de points",
+  "canvas": { "maxWidth": 900, "height": 520 },
+  "colors": {
+    "single": "#E8A96A",
+    "palette": ["#E8A96A", "#5DBED4", "#B8E6A8", "#F5BC85", "#8FD4E3", "#D4C29B", "#94A3B8"],
+    "regression": "#B8E6A8",
+    "axis": "#94A3B8",
+    "grid": "#313244",
+    "background": "#262637",
+    "text": "#E0F4F8"
+  },
+  "pointRadius": 2.3,
+  "pointAlpha": 0.45,
+  "animation": { "enabled": true, "durationMs": 600 },
+  "overlays": { "showRegression": true, "showR2": true }
+}

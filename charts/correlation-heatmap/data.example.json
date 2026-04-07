@@ -1,0 +1,32 @@
+{
+  "columns": ["price", "duration", "class", "stops"],
+  "types": ["num", "num", "cat", "cat"],
+  "matrix": [
+    [
+      { "strength": 1.0, "signed": 1.0, "method": "diag" },
+      { "strength": 0.20, "signed": 0.20, "method": "pearson" },
+      { "strength": 0.93, "signed": null, "method": "eta" },
+      { "strength": 0.28, "signed": null, "method": "eta" }
+    ],
+    [
+      { "strength": 0.20, "signed": 0.20, "method": "pearson" },
+      { "strength": 1.0, "signed": 1.0, "method": "diag" },
+      { "strength": 0.35, "signed": null, "method": "eta" },
+      { "strength": 0.72, "signed": null, "method": "eta" }
+    ],
+    [
+      { "strength": 0.93, "signed": null, "method": "eta" },
+      { "strength": 0.35, "signed": null, "method": "eta" },
+      { "strength": 1.0, "signed": 1.0, "method": "diag" },
+      { "strength": 0.18, "signed": null, "method": "cramer" }
+    ],
+    [
+      { "strength": 0.28, "signed": null, "method": "eta" },
+      { "strength": 0.72, "signed": null, "method": "eta" },
+      { "strength": 0.18, "signed": null, "method": "cramer" },
+      { "strength": 1.0, "signed": 1.0, "method": "diag" }
+    ]
+  ],
+  "method": "pearson",
+  "excluded": []
+}

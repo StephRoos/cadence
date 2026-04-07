@@ -1,0 +1,38 @@
+{
+  "num": "price",
+  "cat": "airline",
+  "groups": [
+    {
+      "modality": "AirFrance",
+      "count": 1200,
+      "min": 50, "max": 820,
+      "q1": 140, "median": 220, "q3": 340,
+      "whisker_low": 50, "whisker_high": 620,
+      "mean": 245,
+      "outliers": [720, 780, 820],
+      "outliers_low_count": 0, "outliers_high_count": 3
+    },
+    {
+      "modality": "Ryanair",
+      "count": 980,
+      "min": 20, "max": 410,
+      "q1": 45, "median": 75, "q3": 120,
+      "whisker_low": 20, "whisker_high": 220,
+      "mean": 92,
+      "outliers": [260, 340, 410],
+      "outliers_low_count": 0, "outliers_high_count": 3
+    },
+    {
+      "modality": "Lufthansa",
+      "count": 750,
+      "min": 80, "max": 950,
+      "q1": 180, "median": 290, "q3": 420,
+      "whisker_low": 80, "whisker_high": 780,
+      "mean": 320,
+      "outliers": [850, 920, 950],
+      "outliers_low_count": 0, "outliers_high_count": 3
+    }
+  ],
+  "total_modalities": 8,
+  "truncated": true
+}

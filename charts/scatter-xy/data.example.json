@@ -1,0 +1,19 @@
+{
+  "x": "duration",
+  "y": "price",
+  "points": [
+    {"x": 2.1, "y": 5900, "group": "all"},
+    {"x": 3.4, "y": 7200, "group": "all"},
+    {"x": 5.2, "y": 9800, "group": "all"},
+    {"x": 1.8, "y": 5400, "group": "all"},
+    {"x": 8.5, "y": 15200, "group": "all"},
+    {"x": 6.1, "y": 11300, "group": "all"},
+    {"x": 4.2, "y": 8100, "group": "all"},
+    {"x": 9.8, "y": 17500, "group": "all"}
+  ],
+  "total": 300153,
+  "sampled": 8,
+  "regression": { "slope": 1450, "intercept": 3200, "r2": 0.04 },
+  "groups": ["all"],
+  "hue": null
+}

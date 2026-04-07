@@ -1,0 +1,19 @@
+{
+  "title": "Matrice de corrélation",
+  "canvas": { "maxWidth": 720, "cellMin": 28, "cellMax": 64 },
+  "colors": {
+    "numNum": "#E8A96A",
+    "catCat": "#5DBED4",
+    "mixed":  "#B8E6A8",
+    "neg": "#5DBED4",
+    "pos": "#E8A96A",
+    "neutral": "#262637",
+    "axis": "#94A3B8",
+    "grid": "#313244",
+    "background": "#262637",
+    "text": "#E0F4F8"
+  },
+  "animation": { "enabled": true, "durationMs": 900, "stagger": 8 },
+  "format": { "decimals": 2 },
+  "overlays": { "showValues": true, "threshold": 0 }
+}

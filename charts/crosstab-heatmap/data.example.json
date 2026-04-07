@@ -1,0 +1,26 @@
+{
+  "a": "airline",
+  "b": "class",
+  "rows": ["Vistara", "Air_India", "Indigo", "GO_FIRST", "AirAsia", "SpiceJet"],
+  "cols": ["Economy", "Business"],
+  "counts": [
+    [56000, 14000],
+    [48000, 12000],
+    [32000, 0],
+    [24000, 0],
+    [18000, 0],
+    [10000, 0]
+  ],
+  "row_ratios": [
+    [0.80, 0.20],
+    [0.80, 0.20],
+    [1.0, 0.0],
+    [1.0, 0.0],
+    [1.0, 0.0],
+    [1.0, 0.0]
+  ],
+  "total": 214000,
+  "a_unique": 6,
+  "b_unique": 2,
+  "truncated": false
+}

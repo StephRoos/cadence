@@ -1,0 +1,15 @@
+{
+  "title": "Table de contingence",
+  "canvas": { "maxWidth": 900 },
+  "colors": {
+    "low": "#262637",
+    "high": "#5DBED4",
+    "axis": "#94A3B8",
+    "grid": "#313244",
+    "background": "#262637",
+    "text": "#E0F4F8"
+  },
+  "animation": { "enabled": true, "durationMs": 800, "stagger": 15 },
+  "format": { "percentDecimals": 0 },
+  "overlays": { "showCounts": true, "showPercent": true, "mode": "row_ratio" }
+}
