@@ -1,0 +1,29 @@
+{
+  "title": "Distribution",
+  "canvas": {
+    "maxWidth": 900,
+    "height": 360
+  },
+  "colors": {
+    "bar": "#5DBED4",
+    "barHover": "#8FD4E3",
+    "other": "#6E6E85",
+    "axis": "#94A3B8",
+    "grid": "#313244",
+    "background": "#262637",
+    "text": "#E0F4F8"
+  },
+  "animation": {
+    "enabled": true,
+    "durationMs": 700,
+    "stagger": 30
+  },
+  "format": {
+    "thousandsSeparator": " ",
+    "percentDecimals": 1
+  },
+  "overlays": {
+    "showCounts": true,
+    "showPercent": true
+  }
+}

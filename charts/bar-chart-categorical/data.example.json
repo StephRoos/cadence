@@ -1,0 +1,17 @@
+{
+  "column": "airline",
+  "modalities": [
+    { "value": "Vistara",   "count": 127859, "ratio": 0.4259 },
+    { "value": "Air_India", "count": 80892,  "ratio": 0.2694 },
+    { "value": "Indigo",    "count": 43120,  "ratio": 0.1436 },
+    { "value": "GO_FIRST",  "count": 23173,  "ratio": 0.0772 },
+    { "value": "AirAsia",   "count": 16098,  "ratio": 0.0536 },
+    { "value": "SpiceJet",  "count": 9011,   "ratio": 0.0300 },
+    { "value": "Autres",    "count": 100,    "ratio": 0.0003, "is_other": true, "other_modalities": 2 }
+  ],
+  "total": 300253,
+  "unique_count": 8,
+  "dominant_value": "Vistara",
+  "dominant_ratio": 0.4259,
+  "truncated": true
+}

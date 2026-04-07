@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "bar-chart-categorical",
+  "description": "Distribution d'une variable catégorielle — barres horizontales triées par fréquence. Les modalités au-delà du top N peuvent être regroupées dans un bucket 'Autres' (is_other=true) qui sera affiché distinctement.",
+  "type": "object",
+  "properties": {
+    "column": { "type": "string", "description": "Nom de la colonne catégorielle — label du graphe" },
+    "modalities": {
+      "type": "array",
+      "description": "Une entrée par modalité, dans l'ordre d'affichage (tri décroissant par count recommandé)",
+      "items": {
+        "type": "object",
+        "properties": {
+          "value": { "type": ["string", "number", "boolean", "null"], "description": "Valeur de la modalité" },
+          "count": { "type": "integer", "minimum": 0 },
+          "ratio": { "type": "number", "minimum": 0, "maximum": 1, "description": "Part sur total (0..1)" },
+          "is_other": { "type": "boolean", "description": "Si true, barre traitée comme bucket de regroupement" },
+          "other_modalities": { "type": "integer", "description": "Nombre de modalités regroupées dans ce bucket" }
+        },
+        "required": ["value", "count", "ratio"]
+      }
+    },
+    "total": { "type": "integer", "minimum": 0 },
+    "unique_count": { "type": "integer", "minimum": 0, "description": "Nombre total de modalités distinctes (avant troncature)" },
+    "dominant_value": { "description": "Modalité majoritaire (= modalities[0].value)" },
+    "dominant_ratio": { "type": "number", "minimum": 0, "maximum": 1 },
+    "truncated": { "type": "boolean", "description": "True si au moins une modalité a été regroupée dans 'Autres'" }
+  },
+  "required": ["column", "modalities", "total"]
+}
