@@ -4,10 +4,31 @@
 
 import * as d3 from "https://cdn.jsdelivr.net/npm/d3@7/+esm"
 
-const [data, config] = await Promise.all([
-  d3.json("./data.example.json"),
-  d3.json("./config.example.json"),
-])
+// Mode embed : si l'URL contient ?embed=1, on attend les données via postMessage
+// (envoyées par le parent qui intègre le canevas en iframe). Sinon mode standalone :
+// on charge data.example.json + config.example.json depuis le dossier.
+const params = new URLSearchParams(location.search)
+const isEmbed = params.get("embed") === "1"
+
+async function loadData() {
+  if (!isEmbed) {
+    return Promise.all([
+      d3.json("./data.example.json"),
+      d3.json("./config.example.json"),
+    ])
+  }
+  // Embed : on signale qu'on est prêt, puis on attend le premier message {data, config}.
+  return new Promise((resolve) => {
+    window.addEventListener("message", function handler(e) {
+      if (!e.data || !e.data.data || !e.data.config) return
+      window.removeEventListener("message", handler)
+      resolve([e.data.data, e.data.config])
+    })
+    parent.postMessage({ type: "cadence:ready" }, "*")
+  })
+}
+
+const [data, config] = await loadData()
 
 // Marges : top élargi pour titre, bottom pour label X, left pour label Y.
 const margin = { top: 60, right: 20, bottom: 70, left: 75 }
