@@ -102,9 +102,13 @@
             "count": 4
         }
     ],
+    "requested_bins": 20,
+    "effective_bins": 20,
     "stats": {
         "mean": 12.221020812718848,
         "median": 11.25,
+        "q1": 6.83,
+        "q3": 16.17,
         "min": 0.83,
         "max": 49.83,
         "count": 300153

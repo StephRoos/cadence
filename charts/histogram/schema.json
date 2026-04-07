@@ -27,6 +27,8 @@
       "properties": {
         "mean":   { "type": ["number", "null"] },
         "median": { "type": ["number", "null"] },
+        "q1":     { "type": ["number", "null"], "description": "Premier quartile (25%) — utilisé pour le boxplot optionnel" },
+        "q3":     { "type": ["number", "null"], "description": "Troisième quartile (75%) — utilisé pour le boxplot optionnel" },
         "min":    { "type": ["number", "null"] },
         "max":    { "type": ["number", "null"] },
         "count":  { "type": "integer", "minimum": 0 }

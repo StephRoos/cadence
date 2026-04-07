@@ -28,7 +28,8 @@
   "overlays": {
     "showMean": true,
     "showMedian": true,
-    "showStatsBox": true
+    "showStatsBox": true,
+    "showBoxplot": true
   },
 
   "format": {
