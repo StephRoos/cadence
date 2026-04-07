@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "histogram",
+  "description": "Distribution d'une variable numérique sous forme d'histogramme. Le binning est effectué côté producteur (adapter Polars/pandas ou backend), pas dans le canevas.",
+  "type": "object",
+  "properties": {
+    "column": {
+      "type": "string",
+      "description": "Nom de la colonne représentée — sert de label d'axe X"
+    },
+    "bins": {
+      "type": "array",
+      "description": "Une entrée par bin, dans l'ordre croissant des bornes",
+      "items": {
+        "type": "object",
+        "properties": {
+          "x0": { "type": "number", "description": "Borne inférieure (incluse)" },
+          "x1": { "type": "number", "description": "Borne supérieure (exclue, sauf le dernier bin)" },
+          "count": { "type": "integer", "minimum": 0, "description": "Nombre d'observations dans ce bin" }
+        },
+        "required": ["x0", "x1", "count"]
+      }
+    },
+    "stats": {
+      "type": "object",
+      "description": "Statistiques globales pour overlay (lignes verticales mean/median, légende)",
+      "properties": {
+        "mean":   { "type": ["number", "null"] },
+        "median": { "type": ["number", "null"] },
+        "min":    { "type": ["number", "null"] },
+        "max":    { "type": ["number", "null"] },
+        "count":  { "type": "integer", "minimum": 0 }
+      },
+      "required": ["count"]
+    }
+  },
+  "required": ["column", "bins", "stats"]
+}

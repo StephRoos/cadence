@@ -1,0 +1,38 @@
+{
+  "title": "Distribution",
+  "subtitle": "",
+
+  "canvas": {
+    "maxWidth": 900,
+    "height": 420
+  },
+
+  "colors": {
+    "bar": "#E8A96A",
+    "barHover": "#F5BC85",
+    "axis": "#94A3B8",
+    "grid": "#313244",
+    "mean": "#5DBED4",
+    "median": "#B8E6A8",
+    "background": "#262637",
+    "text": "#E0F4F8"
+  },
+
+  "animation": {
+    "enabled": true,
+    "durationMs": 800,
+    "easing": "cubicOut",
+    "stagger": 15
+  },
+
+  "overlays": {
+    "showMean": true,
+    "showMedian": true,
+    "showStatsBox": true
+  },
+
+  "format": {
+    "valueDecimals": 2,
+    "thousandsSeparator": " "
+  }
+}
