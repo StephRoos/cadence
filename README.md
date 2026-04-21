@@ -1,5 +1,12 @@
 # Cadence
 
+> **Statut : en pause depuis 2026-04-21.**
+> Phase 1 (p5.js) terminée — 4 canevas livrés : `animated-line`, `slope-chart`, `bar-chart`, `spaghetti-plot`.
+> Phase 2 (D3) en cours — 1 canevas livré (`scatterplot`), 7 restants (small-multiples, heatmap, bump-chart, annotated-line, stacked-area, connected-scatterplot, treemap).
+> **Conditions de reprise** : nouveau canevas requis par Prisme (module 6 reporting) ou par un projet portfolio en cours.
+> Cadence reste en submodule actif de Prisme — le code existant est consommé, pas modifié.
+> Issues ouvertes étiquetées `on-hold`.
+
 Studio de dataviz narrative animée.
 
 Chaque graphe raconte une histoire par le mouvement — pas un dashboard, pas un chart builder. Une bibliothèque de canevas paramétriques où l'animation est le différenciateur.
