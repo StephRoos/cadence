@@ -42,7 +42,7 @@ ML engineer solide. JS notions de base. p5.js en cours d'apprentissage. D3 incon
 - Techniques dataviz éprouvées uniquement — pas de visualisations abstraites
 - L'animation sert la narration, pas la décoration
 - Accessibilité : couleur + forme (pas couleur seule)
-- Référence des techniques : `~/Documents/SecondBrain/02-Areas/dev/Bibliothèque Dataviz.md`
+- Référence des techniques : `~/SecondBrain/02-Areas/dev/Bibliothèque Dataviz.md`
 
 ## Gestion via GitHub Issues
 Toute modification, suggestion, amélioration ou changement doit être tracé via une issue GitHub.
@@ -61,10 +61,10 @@ Toute modification, suggestion, amélioration ou changement doit être tracé vi
 - Python/pandas pour les adapters côté serveur (uv pour les dépendances)
 
 ## Documentation
-- Vault Obsidian SecondBrain : `~/Documents/SecondBrain/`
-- Plan d'apprentissage : `~/Documents/SecondBrain/01-Projects/cadence/Plan Apprentissage Cadence.md`
-- Bibliothèque dataviz : `~/Documents/SecondBrain/02-Areas/dev/Bibliothèque Dataviz.md`
-- Notes p5.js : `~/Documents/SecondBrain/02-Areas/dev/p5.js Fondamentaux.md`
+- Vault Obsidian SecondBrain : `~/SecondBrain/`
+- Plan d'apprentissage : `~/SecondBrain/01-Projects/cadence/Plan Apprentissage Cadence.md`
+- Bibliothèque dataviz : `~/SecondBrain/02-Areas/dev/Bibliothèque Dataviz.md`
+- Notes p5.js : `~/SecondBrain/02-Areas/dev/p5.js Fondamentaux.md`
 
 ## Canevas — état actuel
 - `animated-line` — ✅ Série temporelle + fan chart IPCC (migré depuis carbon-witness)
